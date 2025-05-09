@@ -3,50 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <title>Seconds Calculator</title>
-    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
         body {
-            font-family: sans-serif;
-            background: #f0f0f0;
-            padding: 40px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0b1f3a, #13294b);
+            color: #ffffff;
+            padding: 50px;
             text-align: center;
         }
-        select, input, button {
+        h1 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            color: #ffffff;
+        }
+        label {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        select, input {
             padding: 10px;
             margin: 10px;
             font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            width: 200px;
+        }
+        input {
+            width: 150px;
+        }
+        button {
+            background-color: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #125ea4;
         }
         #result {
-            margin-top: 20px;
-            font-size: 20px;
-            color: #333;
+            margin-top: 30px;
+            font-size: 22px;
+            color: #ffeb3b;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        footer {
+            margin-top: 50px;
+            font-size: 12px;
+            color: #bbbbbb;
         }
     </style>
 </head>
 <body>
-    <h1>Seconds Since Sunday 00:00:00</h1>
+    <div class="container">
+        <h1>Seconds Since Sunday 00:00:00</h1>
 
-    <div>
-        <label for="day">Day:</label>
-        <select id="day">
-            <option>Sunday</option>
-            <option>Monday</option>
-            <option>Tuesday</option>
-            <option>Wednesday</option>
-            <option>Thursday</option>
-            <option>Friday</option>
-            <option>Saturday</option>
-        </select>
+        <div>
+            <label for="day">Day:</label>
+            <select id="day">
+                <option>Sunday</option>
+                <option>Monday</option>
+                <option>Tuesday</option>
+                <option>Wednesday</option>
+                <option>Thursday</option>
+                <option>Friday</option>
+                <option>Saturday</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="time">Time (HH:MM:SS):</label>
+            <input type="text" id="time" value="00:00:00" placeholder="HH:MM:SS">
+        </div>
+
+        <button onclick="calculateSeconds()">Calculate</button>
+
+        <div id="result"></div>
     </div>
 
-    <div>
-        <label for="time">Time (HH:MM:SS):</label>
-        <input type="text" id="time" value="00:00:00">
-    </div>
-
-    <button onclick="calculateSeconds()">Calculate</button>
-
-    <div id="result"></div>
+    <footer>
+        &copy; 2025 Your Name or Company — Calculator inspired by 3CX style
+    </footer>
 
     <script>
         function calculateSeconds() {
