@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seconds Calculator</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f0f0f0;
+            padding: 40px;
+            text-align: center;
+        }
+        select, input, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Seconds Since Sunday 00:00:00</h1>
+
+    <div>
+        <label for="day">Day:</label>
+        <select id="day">
+            <option>Sunday</option>
+            <option>Monday</option>
+            <option>Tuesday</option>
+            <option>Wednesday</option>
+            <option>Thursday</option>
+            <option>Friday</option>
+            <option>Saturday</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="time">Time (HH:MM:SS):</label>
+        <input type="text" id="time" value="00:00:00">
+    </div>
+
+    <button onclick="calculateSeconds()">Calculate</button>
+
+    <div id="result"></div>
+
+    <script>
+        function calculateSeconds() {
+            const day = document.getElementById('day').value.toLowerCase();
+            const timeStr = document.getElementById('time').value;
+            const dayMapping = {
+                'sunday': 0,
+                'monday': 1,
+                'tuesday': 2,
+                'wednesday': 3,
+                'thursday': 4,
+                'friday': 5,
+                'saturday': 6
+            };
+
+            const dayOffset = dayMapping[day];
+            if (dayOffset === undefined) {
+                document.getElementById('result').innerText = 'Invalid day';
+                return;
+            }
+
+            const timeParts = timeStr.split(':');
+            if (timeParts.length !== 3) {
+                document.getElementById('result').innerText = 'Invalid time format (use HH:MM:SS)';
+                return;
+            }
+
+            const hours = parseInt(timeParts[0]);
+            const minutes = parseInt(timeParts[1]);
+            const seconds = parseInt(timeParts[2]);
+
+            if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
+                document.getElementById('result').innerText = 'Invalid time numbers';
+                return;
+            }
+
+            const totalSeconds = dayOffset * 86400 + hours * 3600 + minutes * 60 + seconds;
+
+            document.getElementById('result').innerText = `${totalSeconds} seconds since Sunday 00:00:00`;
+        }
+    </script>
+</body>
+</html>
