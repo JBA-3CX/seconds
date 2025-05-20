@@ -63,6 +63,65 @@
         }
     </style>
 </head>
+    <script>
+const cities = [
+    { name: "New York", timeZone: "America/New_York" },
+    { name: "London", timeZone: "Europe/London" },
+    { name: "Paris", timeZone: "Europe/Paris" },
+    { name: "Tokyo", timeZone: "Asia/Tokyo" },
+    { name: "Sydney", timeZone: "Australia/Sydney" },
+    { name: "Los Angeles", timeZone: "America/Los_Angeles" },
+    { name: "São Paulo", timeZone: "America/Sao_Paulo" },
+    { name: "Moscow", timeZone: "Europe/Moscow" },
+    { name: "Dubai", timeZone: "Asia/Dubai" },
+    { name: "Johannesburg", timeZone: "Africa/Johannesburg" },
+    { name: "Singapore", timeZone: "Asia/Singapore" },
+    { name: "Bangkok", timeZone: "Asia/Bangkok" },
+    { name: "New Delhi", timeZone: "Asia/Kolkata" },
+    { name: "Beijing", timeZone: "Asia/Shanghai" },
+    { name: "Berlin", timeZone: "Europe/Berlin" },
+    { name: "Reykjavik", timeZone: "Atlantic/Reykjavik" }
+];
+
+function getHourInTimeZone(timeZone) {
+    const now = new Date();
+    return new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        hour12: false,
+        timeZone: timeZone
+    }).format(now);
+}
+
+function updateNighttimeList() {
+    const ul = document.getElementById("night-locations");
+    ul.innerHTML = "";
+
+    const now = new Date();
+
+    const inNight = cities.filter(city => {
+        const hour = parseInt(getHourInTimeZone(city.timeZone));
+        return hour >= 1 && hour < 5;
+    });
+
+    if (inNight.length === 0) {
+        const li = document.createElement("li");
+        li.textContent = "No locations currently between 1AM–5AM.";
+        ul.appendChild(li);
+    } else {
+        inNight.forEach(city => {
+            const li = document.createElement("li");
+            const hour = getHourInTimeZone(city.timeZone);
+            li.textContent = `${city.name} – ${hour}:00`;
+            ul.appendChild(li);
+        });
+    }
+}
+
+// Update immediately and every 60 seconds
+updateNighttimeList();
+setInterval(updateNighttimeList, 60000);
+</script>
+
 <body>
     <div class="container">
         <h1>Seconds Since Sunday 00:00:00</h1>
@@ -88,6 +147,10 @@
         <button onclick="calculateSeconds()">Calculate</button>
 
         <div id="result"></div>
+    </div>
+    <div class="container" style="margin-top: 50px;">
+        <h2>🌙 Locations Currently in Nighttime (1AM–5AM)</h2>
+        <ul id="night-locations" style="list-style: none; padding-left: 0; font-size: 18px;"></ul>
     </div>
 
     <footer>
