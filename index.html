@@ -61,12 +61,8 @@
             font-size: 12px;
             color: #bbbbbb;
         }
-        #night-locations li {
-            padding: 5px 0;
-        }
     </style>
 </head>
-
 <body>
     <div class="container">
         <h1>Seconds Since Sunday 00:00:00</h1>
@@ -94,9 +90,9 @@
         <div id="result"></div>
     </div>
 
-    </br>
+    <br><br>
 
-    <div class="container" style="margin-top: 50px;">
+    <div class="container">
         <h2>🌙 Locations Currently in Nighttime (1AM–5AM)</h2>
         <ul id="night-locations" style="list-style: none; padding-left: 0; font-size: 18px;"></ul>
     </div>
@@ -104,32 +100,59 @@
     <footer></footer>
 
     <script>
-        const cities = [
-            { name: "New York", timeZone: "America/New_York" },
-            { name: "London", timeZone: "Europe/London" },
-            { name: "Paris", timeZone: "Europe/Paris" },
-            { name: "Tokyo", timeZone: "Asia/Tokyo" },
-            { name: "Sydney", timeZone: "Australia/Sydney" },
-            { name: "Los Angeles", timeZone: "America/Los_Angeles" },
-            { name: "São Paulo", timeZone: "America/Sao_Paulo" },
-            { name: "Moscow", timeZone: "Europe/Moscow" },
-            { name: "Dubai", timeZone: "Asia/Dubai" },
-            { name: "Johannesburg", timeZone: "Africa/Johannesburg" },
-            { name: "Singapore", timeZone: "Asia/Singapore" },
-            { name: "Bangkok", timeZone: "Asia/Bangkok" },
-            { name: "New Delhi", timeZone: "Asia/Kolkata" },
-            { name: "Beijing", timeZone: "Asia/Shanghai" },
-            { name: "Berlin", timeZone: "Europe/Berlin" },
-            { name: "Reykjavik", timeZone: "Atlantic/Reykjavik" }
-        ];
+       const cities = [
+    { name: "Baker Island", timeZone: "Etc/GMT+12" },        // UTC−12:00
+    { name: "Honolulu", timeZone: "Pacific/Honolulu" },      // UTC−10:00
+    { name: "Anchorage", timeZone: "America/Anchorage" },    // UTC−09:00
+    { name: "Los Angeles", timeZone: "America/Los_Angeles" },// UTC−08:00
+    { name: "Denver", timeZone: "America/Denver" },          // UTC−07:00
+    { name: "Chicago", timeZone: "America/Chicago" },        // UTC−06:00
+    { name: "New York", timeZone: "America/New_York" },      // UTC−05:00
+    { name: "Caracas", timeZone: "America/Caracas" },        // UTC−04:00
+    { name: "Halifax", timeZone: "America/Halifax" },        // UTC−03:00
+    { name: "Buenos Aires", timeZone: "America/Argentina/Buenos_Aires" }, // UTC−03:00
+    { name: "South Georgia", timeZone: "Atlantic/South_Georgia" }, // UTC−02:00
+    { name: "Azores", timeZone: "Atlantic/Azores" },         // UTC−01:00
+    { name: "Reykjavik", timeZone: "Atlantic/Reykjavik" },   // UTC±00:00
+    { name: "London", timeZone: "Europe/London" },
+    { name: "Berlin", timeZone: "Europe/Berlin" },           // UTC+01:00
+    { name: "Cairo", timeZone: "Africa/Cairo" },             // UTC+02:00
+    { name: "Moscow", timeZone: "Europe/Moscow" },           // UTC+03:00
+    { name: "Tehran", timeZone: "Asia/Tehran" },             // UTC+03:30
+    { name: "Dubai", timeZone: "Asia/Dubai" },               // UTC+04:00
+    { name: "Kabul", timeZone: "Asia/Kabul" },               // UTC+04:30
+    { name: "Karachi", timeZone: "Asia/Karachi" },           // UTC+05:00
+    { name: "New Delhi", timeZone: "Asia/Kolkata" },         // UTC+05:30
+    { name: "Kathmandu", timeZone: "Asia/Kathmandu" },       // UTC+05:45
+    { name: "Dhaka", timeZone: "Asia/Dhaka" },               // UTC+06:00
+    { name: "Yangon", timeZone: "Asia/Yangon" },             // UTC+06:30
+    { name: "Bangkok", timeZone: "Asia/Bangkok" },           // UTC+07:00
+    { name: "Singapore", timeZone: "Asia/Singapore" },       // UTC+08:00
+    { name: "Eucla", timeZone: "Australia/Eucla" },          // UTC+08:45
+    { name: "Tokyo", timeZone: "Asia/Tokyo" },               // UTC+09:00
+    { name: "Adelaide", timeZone: "Australia/Adelaide" },    // UTC+09:30
+    { name: "Sydney", timeZone: "Australia/Sydney" },        // UTC+10:00
+    { name: "Nouméa", timeZone: "Pacific/Noumea" },          // UTC+11:00
+    { name: "Auckland", timeZone: "Pacific/Auckland" },      // UTC+12:00
+    { name: "Chatham Islands", timeZone: "Pacific/Chatham" },// UTC+12:45
+    { name: "Apia", timeZone: "Pacific/Apia" },              // UTC+13:00
+    { name: "Kiritimati", timeZone: "Pacific/Kiritimati" }   // UTC+14:00
+];
 
-        function getHourInTimeZone(timeZone) {
+        function getTimePartsInTimeZone(timeZone) {
             const now = new Date();
-            return new Intl.DateTimeFormat("en-US", {
-                hour: "numeric",
+            const formatter = new Intl.DateTimeFormat("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
                 hour12: false,
                 timeZone: timeZone
-            }).format(now);
+            });
+            const [hourStr, minuteStr] = formatter.format(now).split(':');
+            return {
+                hour: parseInt(hourStr, 10),
+                minute: parseInt(minuteStr, 10),
+                formatted: `${hourStr}:${minuteStr}`
+            };
         }
 
         function updateNighttimeList() {
@@ -137,8 +160,9 @@
             ul.innerHTML = "";
 
             const inNight = cities.filter(city => {
-                const hour = parseInt(getHourInTimeZone(city.timeZone));
-                return hour >= 1 && hour < 5;
+                const { hour, minute } = getTimePartsInTimeZone(city.timeZone);
+                const totalMinutes = hour * 60 + minute;
+                return totalMinutes >= 60 && totalMinutes < 300; // 1:00 AM to 4:59 AM
             });
 
             if (inNight.length === 0) {
@@ -147,18 +171,13 @@
                 ul.appendChild(li);
             } else {
                 inNight.forEach(city => {
+                    const { formatted } = getTimePartsInTimeZone(city.timeZone);
                     const li = document.createElement("li");
-                    const hour = getHourInTimeZone(city.timeZone);
-                    li.textContent = `${city.name} – ${hour}:00`;
+                    li.textContent = `${city.name} – ${formatted}`;
                     ul.appendChild(li);
                 });
             }
         }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            updateNighttimeList();
-            setInterval(updateNighttimeList, 60000);
-        });
 
         function calculateSeconds() {
             const day = document.getElementById('day').value.toLowerCase();
@@ -195,8 +214,14 @@
             }
 
             const totalSeconds = dayOffset * 86400 + hours * 3600 + minutes * 60 + seconds;
+
             document.getElementById('result').innerText = `${totalSeconds} seconds since Sunday 00:00:00`;
         }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            updateNighttimeList();
+            setInterval(updateNighttimeList, 60000);
+        });
     </script>
 </body>
 </html>
