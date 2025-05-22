@@ -1,11 +1,11 @@
 const cities = [
     { name: "USA - Baker Island", timeZone: "Etc/GMT+12" },        // UTC−12:00
-    { name: "USA - Honolulu", timeZone: "Pacific/Honolulu" },      // UTC−10:00
-    { name: "USA - Anchorage", timeZone: "America/Anchorage" },    // UTC−09:00
-    { name: "USA - Los Angeles", timeZone: "America/Los_Angeles" },// UTC−08:00
-    { name: "USA - Denver", timeZone: "America/Denver" },          // UTC−07:00
-    { name: "USA - Chicago", timeZone: "America/Chicago" },        // UTC−06:00
-    { name: "USA - New York", timeZone: "America/New_York" },      // UTC−05:00
+    { name: "USA - Honolulu, HI", timeZone: "Pacific/Honolulu" },      // UTC−10:00
+    { name: "USA - Anchorage, AK", timeZone: "America/Anchorage" },    // UTC−09:00
+    { name: "USA - Los Angeles, CA", timeZone: "America/Los_Angeles" },// UTC−08:00
+    { name: "USA - Denver, CO", timeZone: "America/Denver" },          // UTC−07:00
+    { name: "USA - Chicago, IL", timeZone: "America/Chicago" },        // UTC−06:00
+    { name: "USA - New York, NY", timeZone: "America/New_York" },      // UTC−05:00
     { name: "Venezuela - Caracas", timeZone: "America/Caracas" },  // UTC−04:00
     { name: "Canada - Halifax", timeZone: "America/Halifax" },     // UTC−03:00
     { name: "Argentina - Buenos Aires", timeZone: "America/Argentina/Buenos_Aires" }, // UTC−03:00
