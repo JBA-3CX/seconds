@@ -1,12 +1,11 @@
 function updateWorkWeekProgress() {
     const now = new Date();
-    const day = now.getDay(); // Sunday = 0, Monday = 1, ..., Saturday = 6
+    const day = now.getDay(); // Sunday = 0
     const hour = now.getHours();
     const minute = now.getMinutes();
 
     const workStartHour = 9;
-    const workEndHour = 17.5; // 17:30 in decimal
-
+    const workEndHour = 17.5; // 17:30
     const totalWorkMs = 5 * 8.5 * 60 * 60 * 1000;
     let workedMs = 0;
 
@@ -27,14 +26,22 @@ function updateWorkWeekProgress() {
     let remainingMs = totalWorkMs - workedMs;
     if (remainingMs < 0) remainingMs = 0;
 
-    const percentLeft = ((remainingMs / totalWorkMs) * 100).toFixed(2);
+    const percentLeft = ((remainingMs / totalWorkMs) * 100);
+    const percentComplete = 100 - percentLeft;
 
-    const output = (day === 0 || day === 6 || hour >= 17.5 || hour < 9)
-        ? "Outside of work hours"
-        : `${percentLeft}% of the work week remaining`;
+    const fill = document.getElementById("work-week-fill");
+    const text = document.getElementById("work-week-text");
 
-    document.getElementById("work-week-progress").textContent = output;
+    if (day === 0 || day === 6 || hour >= 17.5 || hour < 9) {
+        fill.style.width = "100%";
+        fill.style.backgroundColor = "#ccc";
+        text.textContent = "Outside of work hours";
+    } else {
+        fill.style.width = percentComplete.toFixed(2) + "%";
+        fill.style.backgroundColor = "#4caf50";
+        text.textContent = `${percentLeft.toFixed(2)}% of the work week remaining`;
+    }
 }
 
 updateWorkWeekProgress();
-setInterval(updateWorkWeekProgress, 60000); 
+setInterval(updateWorkWeekProgress, 60000);
