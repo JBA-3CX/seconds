@@ -37,4 +37,4 @@ function updateWorkWeekProgress() {
 }
 
 updateWorkWeekProgress();
-setInterval(updateWorkWeekProgress, 60000);
+setInterval(updateWorkWeekProgress, 60000); 
