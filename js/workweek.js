@@ -35,12 +35,13 @@ function updateWorkWeekProgress() {
     }
 
     const percentComplete = (workedMs / totalWorkMs) * 100;
+    const percentLeft = 100 - percentComplete;
 
     // Detect if now is outside work hours or weekend
     const isWeekend = currentDay === 0 || currentDay === 6;
     const beforeWorkday = now < monday;
-    const beforeTodayWorkStart = now.getHours() < 9 || (now.getHours() === 9 && now.getMinutes() === 0 && now.getSeconds() === 0);
-    const afterWorkHours = now.getHours() > 17 || (now.getHours() === 17 && now.getMinutes() > 30);
+    const beforeTodayWorkStart = (now.getHours() < 9) || (now.getHours() === 9 && now.getMinutes() === 0 && now.getSeconds() === 0);
+    const afterWorkHours = (now.getHours() > 17) || (now.getHours() === 17 && now.getMinutes() > 30);
 
     const outsideHours = isWeekend || beforeWorkday || afterWorkHours || beforeTodayWorkStart;
 
@@ -55,10 +56,10 @@ function updateWorkWeekProgress() {
     } else {
         fill.style.width = percentComplete.toFixed(2) + "%";
         fill.style.backgroundColor = "#4caf50";
-        text.textContent = `${percentComplete.toFixed(2)}% of the work week completed`;
+        text.textContent = `${percentComplete.toFixed(2)}% Completed / ${percentLeft.toFixed(2)}% Remaining of the work week`;
     }
 }
 
-// Initial run + update every minute
+// Run on page load and update every minute
 updateWorkWeekProgress();
 setInterval(updateWorkWeekProgress, 60000);
