@@ -1,38 +1,53 @@
 function updateWorkWeekProgress() {
     const now = new Date();
-    const day = now.getDay(); // Sunday = 0
-    const hour = now.getHours();
-    const minute = now.getMinutes();
 
-    const workStartHour = 9;
-    const workEndHour = 17.5; // 17:30
+    // Total milliseconds in the work week (5 days x 8.5 hours)
     const totalWorkMs = 5 * 8.5 * 60 * 60 * 1000;
+
+    // Build Monday 09:00
+    const weekStart = new Date(now);
+    weekStart.setHours(9, 0, 0, 0);
+    weekStart.setDate(now.getDate() - (now.getDay() - 1));
+
+    // Build Friday 17:30
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 4);
+    weekEnd.setHours(17, 30, 0, 0);
+
     let workedMs = 0;
 
-    for (let i = 1; i <= 5; i++) {
-        if (day > i) {
-            workedMs += 8.5 * 60 * 60 * 1000;
-        } else if (day === i) {
-            const currentHour = hour + minute / 60;
-            if (currentHour > workEndHour) {
-                workedMs += 8.5 * 60 * 60 * 1000;
-            } else if (currentHour > workStartHour) {
-                workedMs += (currentHour - workStartHour) * 60 * 60 * 1000;
+    if (now < weekStart) {
+        // Before Monday 09:00
+        workedMs = 0;
+    } else if (now > weekEnd) {
+        // After Friday 17:30
+        workedMs = totalWorkMs;
+    } else {
+        // We're inside the work week
+        // Loop through Monday to Friday
+        for (let i = 0; i < 5; i++) {
+            const dayStart = new Date(weekStart);
+            dayStart.setDate(weekStart.getDate() + i);
+
+            const dayEnd = new Date(dayStart);
+            dayEnd.setHours(17, 30, 0, 0);
+
+            if (now > dayEnd) {
+                workedMs += 8.5 * 60 * 60 * 1000; // full day
+            } else if (now >= dayStart && now <= dayEnd) {
+                workedMs += now - dayStart; // partial current day
+                break;
             }
-            break;
         }
     }
 
-    let remainingMs = totalWorkMs - workedMs;
-    if (remainingMs < 0) remainingMs = 0;
-
-    const percentLeft = ((remainingMs / totalWorkMs) * 100);
-    const percentComplete = 100 - percentLeft;
+    const percentComplete = (workedMs / totalWorkMs) * 100;
+    const percentLeft = 100 - percentComplete;
 
     const fill = document.getElementById("work-week-fill");
     const text = document.getElementById("work-week-text");
 
-    if (day === 0 || day === 6 || hour >= 17.5 || hour < 9) {
+    if (now < weekStart || now > weekEnd) {
         fill.style.width = "100%";
         fill.style.backgroundColor = "#ccc";
         text.textContent = "Outside of work hours";
