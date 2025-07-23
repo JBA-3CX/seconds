@@ -56,7 +56,7 @@ function updateWorkWeekProgress() {
     } else {
         fill.style.width = percentComplete.toFixed(2) + "%";
         fill.style.backgroundColor = "#4caf50";
-        text.textContent = `${percentComplete.toFixed(2)}% Completed / ${percentLeft.toFixed(2)}% Remaining of the work week`;
+        text.textContent = `${percentComplete.toFixed(2)}% Completed / ${percentLeft.toFixed(2)}% Remaining`;
     }
 }
 
